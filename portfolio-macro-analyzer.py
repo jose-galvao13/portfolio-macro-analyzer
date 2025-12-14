@@ -19,7 +19,7 @@ st.markdown("""
 class MacroTrendExplorer:
     def __init__(self):
         self.tickers = {
-            'S&P 500': '^GSPC',         
+            'S&P 500': 'SPY',         
             'US 10Y Yield': '^TNX', 
             'EUR/USD': 'EURUSD=X',      
             'Gold': 'GC=F',
@@ -108,16 +108,28 @@ data = app.fetch_long_term_data()
 
 if not data.empty:
     
-    # 3. Métricas de Topo (KPIs Rápidos)
+   # 3. Métricas de Topo (KPIs Rápidos)
     col1, col2, col3, col4 = st.columns(4)
     
-    sp500_ret = (data['S&P 500'].iloc[-1] / data['S&P 500'].iloc[0]) - 1
-    btc_ret = (data['Bitcoin'].iloc[-1] / data['Bitcoin'].iloc[0]) - 1
+    # --- CORREÇÃO DE SEGURANÇA ---
+    # Só calcula se a coluna existir. Se o Yahoo falhar, mostra "N/A" em vez de crashar.
     
-    col1.metric("S&P 500 (YTD)", f"{sp500_ret*100:.2f}%", delta_color="normal")
-    col2.metric("Bitcoin (YTD)", f"{btc_ret*100:.2f}%", delta_color="normal")
-    col3.metric("Analysed Days", len(data))
-    col4.metric("Last Update", data.index[-1].strftime('%Y-%m-%d'))
+    # S&P 500
+    if 'S&P 500' in data.columns:
+        sp500_ret = (data['S&P 500'].iloc[-1] / data['S&P 500'].iloc[0]) - 1
+        col1.metric("S&P 500 (YTD)", f"{sp500_ret*100:.2f}%")
+    else:
+        col1.metric("S&P 500", "N/A", help="Falha no download dos dados")
+
+    # Bitcoin
+    if 'Bitcoin' in data.columns:
+        btc_ret = (data['Bitcoin'].iloc[-1] / data['Bitcoin'].iloc[0]) - 1
+        col2.metric("Bitcoin (YTD)", f"{btc_ret*100:.2f}%")
+    else:
+        col2.metric("Bitcoin", "N/A")
+
+    col3.metric("Dias Analisados", len(data))
+    col4.metric("Última Atualização", data.index[-1].strftime('%Y-%m-%d'))
 
     # 4. Gráfico Interativo
     st.subheader("Market Performance (2024-2025)")
@@ -180,4 +192,5 @@ if not data.empty:
     )
 
 else:
+
     st.error("")
