@@ -19,7 +19,7 @@ st.markdown("""
 class MacroTrendExplorer:
     def __init__(self):
         self.tickers = {
-            'S&P 500': 'SPY',         
+            'S&P 500': '^GSPC',         
             'US 10Y Yield': '^TNX', 
             'EUR/USD': 'EURUSD=X',      
             'Gold': 'GC=F',
@@ -194,3 +194,4 @@ if not data.empty:
 else:
 
     st.error("")
+
