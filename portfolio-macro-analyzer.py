@@ -128,8 +128,8 @@ if not data.empty:
     else:
         col2.metric("Bitcoin", "N/A")
 
-    col3.metric("Dias Analisados", len(data))
-    col4.metric("Última Atualização", data.index[-1].strftime('%Y-%m-%d'))
+    col3.metric("Analysed Days", len(data))
+    col4.metric("Last Update", data.index[-1].strftime('%Y-%m-%d'))
 
     # 4. Gráfico Interativo
     st.subheader("Market Performance (2024-2025)")
@@ -194,4 +194,5 @@ if not data.empty:
 else:
 
     st.error("")
+
 
