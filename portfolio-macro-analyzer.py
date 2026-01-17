@@ -2,7 +2,7 @@ import streamlit as st
 import yfinance as yf
 import pandas as pd
 import plotly.graph_objects as go
-from datetime import datetime
+from datetime import datetime, timedelta
 import numpy as np
 
 # --- CONFIGURAÇÃO DA PÁGINA ---
@@ -32,10 +32,16 @@ class MacroTrendExplorer:
         # Cache no Streamlit para não sacar dados sempre que clicas num botão
         return self._get_data_internal()
 
-    @st.cache_data(ttl=3600) # Cache válido por 1 hora
+    @st.cache_data(ttl=3600)
     def _get_data_internal(_self):
-        start_date = "2024-01-01"
-        end_date = datetime.now().strftime("%Y-%m-%d")
+        # 1. Definir datas dinâmicas
+        now = datetime.now()
+        
+        # Subtrair 730 dias (2 anos) à data de hoje
+        start_date = (now - timedelta(days=730)).strftime("%Y-%m-%d")
+        
+        # Data de hoje formatada
+        end_date = now.strftime("%Y-%m-%d")
         
         df_list = []
         for name, ticker in _self.tickers.items():
@@ -194,5 +200,6 @@ if not data.empty:
 else:
 
     st.error("")
+
 
 
