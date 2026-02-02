@@ -138,7 +138,7 @@ if not data.empty:
     col4.metric("Last Update", data.index[-1].strftime('%Y-%m-%d'))
 
     # 4. Gráfico Interativo
-    st.subheader("Market Performance (2024-2025)")
+    st.subheader("Market Performance")
     
     # Normalizar para gráfico
     base_prices = data.iloc[0]
@@ -200,6 +200,7 @@ if not data.empty:
 else:
 
     st.error("")
+
 
 
 
